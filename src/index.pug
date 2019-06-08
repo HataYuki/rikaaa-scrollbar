@@ -7,7 +7,8 @@ html(lang="en")
         title Document
         link(rel="stylesheet", href="style.css")
         script(src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?skin=doxy")
-        script(src="rikaaa-scrollbar.js")
+        script(src="https://unpkg.com/@webcomponents/webcomponentsjs@2.2.10/webcomponents-loader.js")
+        script(src="entryfile.js")
         script(src="app.js")
 
     body
@@ -22,7 +23,7 @@ html(lang="en")
                             section#t1
                                 h1= '<rikaaa-scrollbar>'
                                 p The Custom Element in order to impliment simple scrollBar function.
-                                rikaaa-scrollbar(style="width:100%;height:400px;background-color:white;")
+                                rikaaa-scrollbar#demo1(style="width:100%;height:400px;background-color:white;")
                                     div(style="background-color:white;padding:10px;")
                                         img(src="images/mark-twain.jpg" style="margin-bottom:30px;width:100%;")
                                         = 'YOU don’t know about me without you have read a book by the name of The Adventures of Tom Sawyer; but that ain’t no matter. That book was made by Mr. Mark Twain, and he told the truth, mainly. There was things which he stretched, but mainly he told the truth. That is nothing. I never seen anybody but lied one time or another, without it was Aunt Polly, or the widow, or maybe Mary. Aunt Polly – Tom’s Aunt Polly, she is – and Mary, and the Widow Douglas is all told about in that book, which is mostly a true book, with some stretchers, as I said before.'

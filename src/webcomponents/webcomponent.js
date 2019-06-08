@@ -1,13 +1,12 @@
 import '@webcomponents/webcomponentsjs/webcomponents-bundle';
-import '@webcomponents/shadycss/scoping-shim.min';
-import ready from '../assets/js/_Domready';
+import 'mdn-polyfills/Array.prototype.includes';
 import constrain from '../assets/js/_Constrain';
-import Timer from '../assets/js/_Timer';
 import Ease from '../assets/js/_Ease';
 import ResizeObserver from 'resize-observer-polyfill';
 import onebang from '../assets/js/_Onebang';
+import ready from '../assets/js/_Domready';
 
-const _css = '${{{src/webcomponents/rikaaa-scrollbar.scss}}}';
+const _css = '${{{src/webcomponents/webcomponent.scss}}}';
 const _style = `<style>${_css}</style>`;
 const _shadowdomHTML = `
     ${_style}
@@ -39,15 +38,16 @@ template.id = 'rikaaascrollbar';
 template.innerHTML = _shadowdomHTML;
 if (window.ShadyCSS) ShadyCSS.prepareTemplate(template, 'rikaaa-scrollbar');
 
-class rikaaahoge extends HTMLElement{
+export default class rikaaahoge extends HTMLElement {
     constructor() {
         super();
         if (window.ShadyCSS) ShadyCSS.styleElement(this);
-        this.attachShadow({ mode: 'open'});
-        this.shadowRoot.appendChild(template.content.cloneNode(true)); 
-    }
-    connectedCallback() {
-        // data
+        this.attachShadow({
+            mode: 'open'
+        });
+        this.shadowRoot.appendChild(template.content.cloneNode(true));
+
+         // data
         this.btnH = 10;
         this.btnSeparation = 2;
         this.barAreaMaxW = 14;
@@ -64,152 +64,152 @@ class rikaaahoge extends HTMLElement{
         this.barSliding = false;
         this.scrolling = false;
         
-
         this.view = this.shadowRoot.querySelector('.view');
-        
-        // init hide
-        if (this.autohide) this.barHide(0);
+    }
+    connectedCallback() {
 
         let oneHide, oneShow;
+      
+        if (this.autohide) oneShow = onebang(() => this.barShow(200));
 
-        const timer = new Timer(1);
-        timer.Timer(() => {
-            // init
-            this.redraw(0);
-            
-            // this.slotWrap();
-            if(this.autohide) oneShow = onebang(() => this.barShow(200));
-            // oneHide = onebang(() => this.barHide(200));
-
-            // mouse scroll
-            let timer;
-            const mouseScrolling = () => {
-                this.barPos = this.scrollRatio;
-                if(this.autohide) oneShow();
-                oneHide = onebang(() => this.barHide(200));
-                this.scrolling = true;
-                if (this.autohide) {
-                    clearTimeout(timer);
-                    timer = setTimeout(() => {
-                        this.scrolling = false;
-                        if (!this.barOpend && !this.barSliding) {
-                            oneHide();
-                            oneShow = onebang(() => this.barShow(200));
-                        };
-                    }, 3000);
-                }
-            };
-            this.view.addEventListener('scroll', mouseScrolling, {
-                passive: true
-            });
-
-            // to edge
-            const scrollToEdge = e => {
-                const btn = e.currentTarget;
-                if (Array.from(btn.classList).includes('main-btn')) return false;
-                const dir = Array.from(btn.classList).includes('up');
-                if (dir) this.goTo(0, 300);
-                else this.goTo(1, 300);
-                
-            };
-            this.shadowRoot.querySelectorAll('.bar-btn').forEach(elem => { elem.addEventListener('click', scrollToEdge) });
-
-            // reiseze
-            const resize = () => {
-                this.redraw(0);
-            };
-            const resizeOb = new ResizeObserver(resize);
-            resizeOb.observe(this);
-
-
-            // skip
-            const barContanerClick = e => {
-                if (!Array.from(e.target.classList).includes('bar-contaner')) return false;
-                const newScrollRatio = (e.pageY - e.currentTarget.getBoundingClientRect().top) / this.barContanerH;
-                this.goTo(newScrollRatio, 200);
-            };
-            this.shadowRoot.querySelector('.bar-contaner').addEventListener('click', barContanerClick);
-
-
-            // bar scroll
-            let slideStartPos, slideStartRatio,stimer;
-            const slide = (e) => {
-                const slidedVal = e.pageY - slideStartPos;
-                const maxSlideVal = this.barContanerH - this.barHeight;
-                const slidedRatio = slidedVal / maxSlideVal;
-                this.goTo(slideStartRatio + slidedRatio, 0);
-            };
-            const attachslide = e => {
-                window.addEventListener('mousemove', slide);
-                window.addEventListener('touchmove', slide);
-                slideStartPos = e.pageY;
-                slideStartRatio = this.scrollRatio;
-                this.view.classList.add('select-none');
-                this.barSliding = true;
-            };
-            const releaseslide = () => {
-                window.removeEventListener('mousemove', slide);
-                window.removeEventListener('touchmove', slide);
-                this.view.classList.remove('select-none');
-                this.barSliding = false;
-                if (this.autohide) {
-                    clearTimeout(stimer);
-                    stimer = setTimeout(() => {
-                        if (!this.barOpend && !this.scrolling && typeof oneHide === 'function') {
-                            oneHide();
-                            oneShow = onebang(() => this.barShow(200));
-                        };
-                    }, 3000);
-                }
-            };
-            this.shadowRoot.querySelector('.main-btn').addEventListener('mousedown', attachslide);
-            this.shadowRoot.querySelector('.main-btn').addEventListener('touchstart', attachslide);
-            window.addEventListener('mouseup', releaseslide);
-            window.addEventListener('touchend', releaseslide);
-            window.addEventListener('mouseleave', releaseslide);
-            window.addEventListener('touchleave', releaseslide);
-
-            // bar opend and close
-            let botimer;
-            const barOpen = () => {
-                const d = 100;
-                this.allowToEdgeBtn = true;
-                this.allowToBarBtn = true;
-                this.redraw(d);
-                this.barAreaW(this.maxwidth, d, 'ease-out');
-                this.barOpend = true;
-            };
-            const barClose = () => {
-                const d = 80;
-                this.allowToEdgeBtn = false;
-                this.allowToBarBtn = false;
-                this.redraw(d);
-                this.barAreaW(this.minwidth, 80, 'ease-out');
-                this.barOpend = false;
-                if (this.autohide) {
-                    clearTimeout(botimer);
-                    botimer = setTimeout(() => {
-                        if (!this.barSliding && !this.scrolling) {
-                            oneHide();
-                            oneShow = onebang(() => this.barShow(200));
-                        };
-                    }, 3000);
-                }
-            };
-            this.shadowRoot.querySelector('.bar-area').addEventListener('mouseenter', barOpen);
-            this.shadowRoot.querySelector('.bar-area').addEventListener('mouseleave', barClose);
-
-            // navi
-            const navi = e => {
-                const dir = (Array.from(e.currentTarget.classList).includes('edge-top')) ? false : true; // true is next;
-                this.goNavigation(dir);
+        // mouse scroll
+        let timer;
+        this.mouseScrollingFunc = () => {
+            this.barPos = this.scrollRatio;
+            if (this.autohide) oneShow();
+            oneHide = onebang(() => this.barHide(200));
+            this.scrolling = true;
+            if (this.autohide) {
+                clearTimeout(timer);
+                timer = setTimeout(() => {
+                    this.scrolling = false;
+                    if (!this.barOpend && !this.barSliding) {
+                        oneHide();
+                        oneShow = onebang(() => this.barShow(200));
+                    };
+                }, 3000);
             }
-            this.shadowRoot.querySelectorAll('.btn').forEach(elem => { elem.addEventListener('click', navi) });
-
-            // onload this
-            this.dispatchEvent(new CustomEvent('load'));
-            
+        };
+        this.view.addEventListener('scroll', this.mouseScrollingFunc, {
+            passive: true
         });
+
+        // to edge
+        this.scrollToEdgeFunc = e => {
+            const btn = e.currentTarget;
+            if (Array.from(btn.classList).includes('main-btn')) return false;
+            const dir = Array.from(btn.classList).includes('up');
+            if (dir) this.goTo(0, 300);
+            else this.goTo(1, 300);
+
+        };
+        this.shadowRoot.querySelectorAll('.bar-btn').forEach(elem => {
+            elem.addEventListener('click', this.scrollToEdgeFunc)
+        });
+
+        // reiseze
+        const resize = () => {
+            this.redraw(0);
+        };
+        this.resizeOb = new ResizeObserver(resize);
+        this.resizeOb.observe(this);
+
+
+        // skip
+        this.barContanerClickFunc = e => {
+            if (!Array.from(e.target.classList).includes('bar-contaner')) return false;
+            const newScrollRatio = (e.pageY - e.currentTarget.getBoundingClientRect().top) / this.barContanerH;
+            this.goTo(newScrollRatio, 200);
+        };
+        this.shadowRoot.querySelector('.bar-contaner').addEventListener('click', this.barContanerClickFunc);
+
+
+        // bar scroll
+        let slideStartPos, slideStartRatio, stimer;
+        const slide = (e) => {
+            const slidedVal = e.pageY - slideStartPos;
+            const maxSlideVal = this.barContanerH - this.barHeight;
+            const slidedRatio = slidedVal / maxSlideVal;
+            this.goTo(slideStartRatio + slidedRatio, 0);
+        };
+        this.attachslideFunc = e => {
+            window.addEventListener('mousemove', slide);
+            window.addEventListener('touchmove', slide);
+            slideStartPos = e.pageY;
+            slideStartRatio = this.scrollRatio;
+            this.view.classList.add('select-none');
+            this.barSliding = true;
+        };
+        this.releaseslideFunc = () => {
+            window.removeEventListener('mousemove', slide);
+            window.removeEventListener('touchmove', slide);
+            this.view.classList.remove('select-none');
+            this.barSliding = false;
+            if (this.autohide) {
+                clearTimeout(stimer);
+                stimer = setTimeout(() => {
+                    if (!this.barOpend && !this.scrolling && typeof oneHide === 'function') {
+                        oneHide();
+                        oneShow = onebang(() => this.barShow(200));
+                    };
+                }, 3000);
+            }
+        };
+        this.shadowRoot.querySelector('.main-btn').addEventListener('mousedown', this.attachslideFunc);
+        this.shadowRoot.querySelector('.main-btn').addEventListener('touchstart', this.attachslideFunc);
+        window.addEventListener('mouseup', this.releaseslideFunc);
+        window.addEventListener('touchend', this.releaseslideFunc);
+        window.addEventListener('mouseleave', this.releaseslideFunc);
+        window.addEventListener('touchleave', this.releaseslideFunc);
+
+        // bar opend and close
+        let botimer;
+        this.barOpenFunc = () => {
+            const d = 100;
+            this.allowToEdgeBtn = true;
+            this.allowToBarBtn = true;
+            this.redraw(d);
+            this.barAreaW(this.maxwidth, d, 'ease-out');
+            this.barOpend = true;
+        };
+        this.barCloseFunc = () => {
+            const d = 80;
+            this.allowToEdgeBtn = false;
+            this.allowToBarBtn = false;
+            this.redraw(d);
+            this.barAreaW(this.minwidth, 80, 'ease-out');
+            this.barOpend = false;
+            if (this.autohide) {
+                clearTimeout(botimer);
+                botimer = setTimeout(() => {
+                    if (!this.barSliding && !this.scrolling) {
+                        oneHide();
+                        oneShow = onebang(() => this.barShow(200));
+                    };
+                }, 3000);
+            }
+        };
+        this.shadowRoot.querySelector('.bar-area').addEventListener('mouseenter', this.barOpenFunc);
+        this.shadowRoot.querySelector('.bar-area').addEventListener('mouseleave', this.barCloseFunc);
+
+        // navi
+        this.naviFunc = e => {
+            const dir = (Array.from(e.currentTarget.classList).includes('edge-top')) ? false : true; // true is next;
+            this.goNavigation(dir);
+        }
+        this.shadowRoot.querySelectorAll('.btn').forEach(elem => {
+            elem.addEventListener('click', this.naviFunc)
+        });
+        
+        // init
+        ready(() => {
+            this.redraw(0);
+            if (this.autohide) this.barHide(0);
+            this.dispatchEvent(new CustomEvent('load'));
+        });
+       
+
+        
     }
     static get observedAttributes() {
         return [
@@ -220,6 +220,35 @@ class rikaaahoge extends HTMLElement{
     attributeChangedCallback(attr, oldval, newval) {
         if (attr === 'minwidth') this.barAreaW(Number(newval), 0, 'ease-in');
         if (attr === 'usenavi') this.redraw(0);
+    }
+    disconnectedCallback() {
+        this.shadowRoot.querySelectorAll('.btn').forEach(elem => {
+            elem.removeEventListener('click', this.naviFunc)
+        });
+
+        this.shadowRoot.querySelector('.bar-area').removeEventListener('mouseenter', this.barOpenFunc);
+        this.shadowRoot.querySelector('.bar-area').removeEventListener('mouseleave', this.barCloseFunc);
+
+        this.shadowRoot.querySelector('.main-btn').removeEventListener('mousedown', this.attachslideFunc);
+        this.shadowRoot.querySelector('.main-btn').removeEventListener('touchstart', this.attachslideFunc);
+        window.removeEventListener('mouseup', this.releaseslideFunc);
+        window.removeEventListener('touchend', this.releaseslideFunc);
+        window.removeEventListener('mouseleave', this.releaseslideFunc);
+        window.removeEventListener('touchleave', this.releaseslideFunc);
+
+        this.shadowRoot.querySelector('.bar-contaner').removeEventListener('click', this.barContanerClickFunc);
+
+        this.resizeOb.disconnect(this);
+        
+
+        this.shadowRoot.querySelectorAll('.bar-btn').forEach(elem => {
+            elem.removeEventListener('click', this.scrollToEdgeFunc)
+        });
+    
+        this.view.removeEventListener('scroll', this.mouseScrollingFunc, {
+            passive: true
+        });
+        
     }
     get maxwidth() {
         const attr = this.getAttribute('maxwidth');
@@ -247,7 +276,7 @@ class rikaaahoge extends HTMLElement{
         const currentBarContanerH = Number(barContaner.style.height.replace(/px/g, ''));
         const barUIAreaH = barAreaPaddingInner.getBoundingClientRect().height;
         this.barContanerH = barUIAreaH - btnh * 2;
-        
+
         const change = ease => {
             Array.from(btn).forEach(elem => {
                 elem.style.height = `${currentBtnH + ((btnh - currentBtnH) * ease)}px`;
@@ -257,7 +286,7 @@ class rikaaahoge extends HTMLElement{
             });
             barContaner.style.height = `${currentBarContanerH + ((barUIAreaH - (btnh + btnSeparation_px) * 2) - currentBarContanerH) * ease}px`;
         }
-        
+
         if (changIngAnimationDuration_ms !== 0) {
             const ease = new Ease('ease-in', changIngAnimationDuration_ms);
             ease.Start(e => change(e));
@@ -273,7 +302,7 @@ class rikaaahoge extends HTMLElement{
         bar.style.height = `${barHRatio * 100}%`;
         this.barHeight = this.barContanerH * barHRatio;
     }
-    setBarBtnSeparation(NextBackBtnH,btnSeparationH,duration) {
+    setBarBtnSeparation(NextBackBtnH, btnSeparationH, duration) {
         const nextBtn = this.shadowRoot.querySelector('.down');
         const backBtn = this.shadowRoot.querySelector('.up');
         const mainBtn = this.shadowRoot.querySelector('.main-btn');
@@ -281,14 +310,14 @@ class rikaaahoge extends HTMLElement{
         const currentNBBtnH = nextBtn.getBoundingClientRect().height;
         const currentMainBtnH = mainBtn.getBoundingClientRect().height;
         const currentSeparation = Number(nextBtn.style.marginTop.replace(/px/g, ''));
-        
+
         const change = (ease) => {
             const NBbtnH = (currentNBBtnH + (NextBackBtnH - currentNBBtnH) * ease) / areaH * 100;
             const separation = currentSeparation + (btnSeparationH - currentSeparation) * ease;
             Object.assign(nextBtn.style, {
                 height: `${NBbtnH}%`,
                 marginTop: `${separation}px`,
-                
+
             });
             Object.assign(backBtn.style, {
                 height: `${NBbtnH}%`,
@@ -310,7 +339,7 @@ class rikaaahoge extends HTMLElement{
         const viewH = this.viewHeight;
         const contentH = this.areaHeight;
         const scrollRatio = scrollPosY / (contentH - viewH);
-        return constrain(scrollRatio,0,1);
+        return constrain(scrollRatio, 0, 1);
     }
     set barPos(scrollRatio) {
         const bar = this.shadowRoot.querySelector('.bar');
@@ -321,7 +350,7 @@ class rikaaahoge extends HTMLElement{
         bar.style.transform = `translateY(${PosMaxRatio_y * 100 * scrollRatio}%)`;
     }
     goTo(newScrollRatio, duration) {
-        const ratio = constrain(newScrollRatio,0,1)
+        const ratio = constrain(newScrollRatio, 0, 1)
         const currentScrollRatio = this.scrollRatio;
         const diffRatio = ratio - currentScrollRatio;
         const maxScrollVal = this.areaHeight - this.viewHeight;
@@ -330,7 +359,7 @@ class rikaaahoge extends HTMLElement{
             view.scrollTop = (maxScrollVal * currentScrollRatio) + ((maxScrollVal * diffRatio) * ease);
         }
 
-        if (duration !== 0){
+        if (duration !== 0) {
             const ease = new Ease('ease-out', duration);
             ease.Start(e => scroll(e));
         } else {
@@ -350,7 +379,9 @@ class rikaaahoge extends HTMLElement{
     }
     goNavigation(dir) {
         const sag = this.naviSaggestion;
-        const getOffsetTop = id => this.shadowRoot.querySelector('.contents').assignedNodes({ flattern: true }).filter(n => n.nodeType === n.ELEMENT_NODE)[0].querySelector(`#${id}`).offsetTop;
+        const getOffsetTop = id => this.shadowRoot.querySelector('.contents').assignedNodes({
+            flattern: true
+        }).filter(n => n.nodeType === n.ELEMENT_NODE)[0].querySelector(`#${id}`).offsetTop;
         const areaH = this.areaHeight - this.viewHeight;
         if (dir) {
             if (sag.next !== false) this.goTo(getOffsetTop(sag.next.id) / areaH, 300);
@@ -363,7 +394,9 @@ class rikaaahoge extends HTMLElement{
         const goal = this.view.scrollTop;
         const data = this.naviData;
         const near = data.reduce((a, c) => {
-            const getOffsetTop = id => this.shadowRoot.querySelector('.contents').assignedNodes({ flattern: true }).filter(n => n.nodeType === n.ELEMENT_NODE)[0].querySelector(`#${id}`).offsetTop;
+            const getOffsetTop = id => this.shadowRoot.querySelector('.contents').assignedNodes({
+                flattern: true
+            }).filter(n => n.nodeType === n.ELEMENT_NODE)[0].querySelector(`#${id}`).offsetTop;
             return (Math.abs(getOffsetTop(c.id) - goal) < Math.abs(getOffsetTop(a.id) - goal)) ? c : a;
         });
         const indexs = [
@@ -377,7 +410,7 @@ class rikaaahoge extends HTMLElement{
             next: (indexs[2] === false) ? false : data[indexs[2]],
         }
     }
-    get areaHeight(){
+    get areaHeight() {        
         return this.shadowRoot.querySelector('.view-inner').getBoundingClientRect().height;
     }
     get viewHeight() {
@@ -387,18 +420,17 @@ class rikaaahoge extends HTMLElement{
         if (this.allowToEdgeBtn) this.setBarAreaSeparation(this.btnH, this.btnSeparation, duration);
         else this.setBarAreaSeparation(0, 0, duration);
         this.setBarH();
-        if (this.allowToBarBtn) this.setBarBtnSeparation(this.barEdgeBtnH,this.barBtnSeparation, duration);
+        if (this.allowToBarBtn) this.setBarBtnSeparation(this.barEdgeBtnH, this.barBtnSeparation, duration);
         else this.setBarBtnSeparation(0, 0, duration);
         if (this.viewHeight >= this.areaHeight) this.barHide(100);
         else if (!this.autohide) this.barShow(100);
-        
     }
     barOpacity(ratio, duration) {
         const r = constrain(ratio, 0, 1);
         const bar = this.shadowRoot.querySelector('.bar-area');
         const currentRatio = Number(bar.style.opacity);
         const diff = r - currentRatio;
-        
+
         const change = ease => {
             const o = currentRatio + diff * ease;
             const style = bar.style;
@@ -418,10 +450,4 @@ class rikaaahoge extends HTMLElement{
     barHide(duration) {
         this.barOpacity(0, duration);
     }
-    
-    
 }
-
-ready(() => {
-    customElements.define('rikaaa-scrollbar', rikaaahoge);
-});
