@@ -11,7 +11,7 @@ module.exports = {
     },
     webcomponents: {
         files: 'webcomponents/**/*.js',
-        name:'rikaaa-scrollbar',
+        name: 'rikaaa-scrollbar',
     },
     karma: {
         frameworks: ['mocha', 'browserify'],
