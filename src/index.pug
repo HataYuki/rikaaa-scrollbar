@@ -59,19 +59,20 @@ html(lang="en")
                                     li Currently, The Custom Element does not support horizontal scroll bars.
                             section#t3
                                 p.title Installation
+                                p script
                                 pre.prettyprint.lang-html
-                                    = '<script src="rikaaa-img-extra.js"></script>'
-                                pre.prettyprint.lang-js
-                                    = 'import "rikaaa-img-extra.js";'
-                                p If you want to use browser that does not support webcomponent.
-                                pre.prettyprint.lang-js
-                                    ='import "@webcomponents/webcomponentsjs/webcomponents-bundle";'
+                                    = '<!-- If you want to use The Custom Element -->'
                                     br
-                                    ='import "@webcomponents/shadycss/scoping-shim.min";'
-                                pre.prettyprint.lang-html
-                                    ='<script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>'
+                                    = '<script src="https://unpkg.com/@webcomponents/webcomponentsjs@2.2.10/webcomponents-loader.js"></script>'
                                     br
-                                    ='<script src="node_modules/@webcomponents/shadycss/scoping-shim.min.js"></script>'
+                                    br
+                                    = '<script src="rikaaa-scrollbar.js"></script>'
+                                p esm
+                                pre.prettyprint.lang-js
+                                    = 'import "rikaaascrollbar" from "rikaaa-img-scrollbar.esm";'
+                                    br
+                                    br
+                                    ='customElements.define("rikaaa-scrollbar", rikaaascrollbar);'
                             section#t4
                                 p.title Usage
                                 p.important You need to specify the height for 'rikaaa-scrollbar' tag or its parent element!.
@@ -154,6 +155,8 @@ html(lang="en")
                                         br
                                         br
                                         ='main.addEventListener("load", function () {'
+                                        br
+                                        ='    console.log("load");'
                                         br
                                         ='    main.navi(['
                                         br
