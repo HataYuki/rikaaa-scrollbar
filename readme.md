@@ -1,23 +1,20 @@
 # `<rikaaa-scrollbar>`
+![](rikaaa-scrollbar.gif)
 
 
 ## Installation
 ```bash
-#script tag
+#script
+<!-- If you want to use The Custom Element -->
+<script src="https://unpkg.com/@webcomponents/webcomponentsjs@2.2.10/webcomponents-loader.js"></script>
+
 <script src="rikaaa-scrollbar.js"></script>
-
-#esm
-import 'rikaaa-scrollbar.js'
 ```
-If you want to use browser that does not support webcomponent.
 ```bash
-#script tag
-<script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
-<script src="node_modules/@webcomponents/shadycss/scoping-shim.min.js"></script>
+#esm
+import "rikaaascrollbar" from "rikaaa-img-scrollbar.esm";
 
-#ems
-import '@webcomponents/webcomponentsjs/webcomponents-bundle';
-import '@webcomponents/shadycss/scoping-shim.min';
+customElements.define("rikaaa-scrollbar", rikaaascrollbar);
 ```
 
 ## Usage 
@@ -71,6 +68,7 @@ if you want to use navigation.
 var main = document.getElementById("main");
 
 main.addEventListener("load", function () {
+    console.log("load");
     main.navi([
         { name: "page top", id: "t1" },
         { name: "Issue", id: "t2" },

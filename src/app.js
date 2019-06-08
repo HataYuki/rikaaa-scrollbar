@@ -13,9 +13,10 @@ ready(() => {
     
     window.addEventListener('resize', fit);
     fit();
-
+    
     var main = document.getElementById('main');
     main.addEventListener('load', function () {
+        console.log('load');
         main.navi([
             { name: "page top", id: "t1" },
             { name: "Issue", id: "t2" },
@@ -24,4 +25,14 @@ ready(() => {
             { name: "Attribute", id: "t5" },
         ]);
     });
+    
+    
+    // const demo1 = document.getElementById('demo1');
+    // const demo1Parent = demo1.parentNode;
+    // demo1Parent.removeChild(demo1);
+
+
+
+
+
 });
