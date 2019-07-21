@@ -1,10 +1,11 @@
 import '@webcomponents/webcomponentsjs/webcomponents-bundle';
-import 'mdn-polyfills/Array.prototype.includes';
 import constrain from '../assets/js/_Constrain';
 import Ease from '../assets/js/_Ease';
-import ResizeObserver from 'resize-observer-polyfill';
 import onebang from '../assets/js/_Onebang';
 import ready from '../assets/js/_Domready';
+import rikaaaResizeObserver from '../assets/js/rikaaa-ResizeWatcher';
+import throttle from '../assets/js/_throttle';
+import '../assets/js/Array.prototype.includes';
 
 const _css = '${{{src/webcomponents/webcomponent.scss}}}';
 const _style = `<style>${_css}</style>`;
@@ -72,9 +73,18 @@ export default class rikaaahoge extends HTMLElement {
       
         if (this.autohide) oneShow = onebang(() => this.barShow(200));
 
+        if (!window.ResizeObserver && !window.WcRikaaaResizeObserver) {
+            Object.defineProperty(window, 'WcRikaaaResizeObserver', {
+                value: rikaaaResizeObserver
+            });
+        }
+        const resizeobserver = window.ResizeObserver || window.WcRikaaaResizeObserver;
+
         // mouse scroll
         let timer;
-        this.mouseScrollingFunc = () => {
+        this.mouseScrollingFunc = (e) => {
+            e.preventDefault();
+            
             this.barPos = this.scrollRatio;
             if (this.autohide) oneShow();
             oneHide = onebang(() => this.barHide(200));
@@ -90,9 +100,9 @@ export default class rikaaahoge extends HTMLElement {
                 }, 3000);
             }
         };
-        this.view.addEventListener('scroll', this.mouseScrollingFunc, {
-            passive: true
-        });
+        this.mouseScrollingFunc_throtted = throttle(this.mouseScrollingFunc, 10);
+        // this.view.addEventListener('scroll', this.mouseScrollingFunc, {
+        this.view.addEventListener('scroll', this.mouseScrollingFunc_throtted, false);
 
         // to edge
         this.scrollToEdgeFunc = e => {
@@ -107,11 +117,11 @@ export default class rikaaahoge extends HTMLElement {
             elem.addEventListener('click', this.scrollToEdgeFunc)
         });
 
-        // reiseze
+        reiseze
         const resize = () => {
             this.redraw(0);
         };
-        this.resizeOb = new ResizeObserver(resize);
+        this.resizeOb = new resizeobserver(resize);
         this.resizeOb.observe(this);
 
 
@@ -238,16 +248,14 @@ export default class rikaaahoge extends HTMLElement {
 
         this.shadowRoot.querySelector('.bar-contaner').removeEventListener('click', this.barContanerClickFunc);
 
-        this.resizeOb.disconnect(this);
+        this.resizeOb.disconnect();
         
 
         this.shadowRoot.querySelectorAll('.bar-btn').forEach(elem => {
             elem.removeEventListener('click', this.scrollToEdgeFunc)
         });
     
-        this.view.removeEventListener('scroll', this.mouseScrollingFunc, {
-            passive: true
-        });
+        this.view.removeEventListener('scroll', this.mouseScrollingFunc_throtted);
         
     }
     get maxwidth() {
@@ -417,6 +425,7 @@ export default class rikaaahoge extends HTMLElement {
         return this.getBoundingClientRect().height;
     }
     redraw(duration) {
+        this.barPos = this.scrollRatio;
         if (this.allowToEdgeBtn) this.setBarAreaSeparation(this.btnH, this.btnSeparation, duration);
         else this.setBarAreaSeparation(0, 0, duration);
         this.setBarH();
