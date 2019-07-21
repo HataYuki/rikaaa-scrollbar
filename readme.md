@@ -5,16 +5,10 @@
 ## Installation
 ```bash
 #script
-<!-- If you want to use The Custom Element -->
+<!-- If you want to use the Custom Element with browser without not support Webcomponents. -->
 <script src="https://unpkg.com/@webcomponents/webcomponentsjs@2.2.10/webcomponents-loader.js"></script>
 
 <script src="rikaaa-scrollbar.js"></script>
-```
-```bash
-#esm
-import "rikaaascrollbar" from "rikaaa-img-scrollbar.esm";
-
-customElements.define("rikaaa-scrollbar", rikaaascrollbar);
 ```
 
 ## Usage 
