@@ -2,8 +2,8 @@
  * @license
  * rikaaa-scrollbar.js
  *
- * Generated : 2019-07-21
- * Version : 1.0.3
+ * Generated : 2019-08-05
+ * Version : 1.1.0
  * Author : rikaaa.org | Yuki Hata
  * Url : http://rikaaa.org
  *
@@ -45,24 +45,33 @@
 
       window.addEventListener('resize', fit);
       fit();
-      var main = document.getElementById('main');
-      main.addEventListener('load', function () {
+      var scrollbar = document.getElementById('scrollbar');
+      scrollbar.addEventListener('load', function () {
         console.log('load');
-        main.navi([{
-          name: "page top",
-          id: "t1"
+        scrollbar.navi([{
+          name: "demo",
+          id: "demo"
         }, {
-          name: "Issue",
-          id: "t2"
+          name: "issue",
+          id: "issue"
         }, {
-          name: "Installation",
-          id: "t3"
+          name: "installation",
+          id: "installation"
         }, {
-          name: "Usage",
-          id: "t4"
+          name: "usage",
+          id: "usage"
         }, {
-          name: "Attribute",
-          id: "t5"
+          name: "events",
+          id: "events"
+        }, {
+          name: "getters",
+          id: "getters"
+        }, {
+          name: "methods",
+          id: "methods"
+        }, {
+          name: "attributes",
+          id: "attributes"
         }]);
       }); // const demo1 = document.getElementById('demo1');
       // const demo1Parent = demo1.parentNode;
