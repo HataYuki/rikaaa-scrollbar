@@ -14,15 +14,42 @@ ready(() => {
     window.addEventListener('resize', fit);
     fit();
     
-    var main = document.getElementById('main');
-    main.addEventListener('load', function () {
+    var scrollbar = document.getElementById('scrollbar');
+    scrollbar.addEventListener('load', function () {
         console.log('load');
-        main.navi([
-            { name: "page top", id: "t1" },
-            { name: "Issue", id: "t2" },
-            { name: "Installation", id: "t3" },
-            { name: "Usage", id: "t4" },
-            { name: "Attribute", id: "t5" },
+        scrollbar.navi([
+            {
+                name: "demo",
+                id: "demo"
+            },
+            {
+                name: "issue",
+                id: "issue"
+            },
+            {
+                name: "installation",
+                id: "installation"
+            },
+            {
+                name: "usage",
+                id: "usage"
+            },
+            {
+                name: "events",
+                id: "events"
+            },
+            {
+                name: "getters",
+                id: "getters"
+            },
+            {
+                name: "methods",
+                id: "methods"
+            },
+            {
+                name: "attributes",
+                id: "attributes"
+            }
         ]);
     });
     

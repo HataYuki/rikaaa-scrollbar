@@ -1,3 +1,4 @@
+@charset "UTF-8";
 /*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */
 /* Document
    ========================================================================== */
@@ -311,81 +312,119 @@ template {
   -webkit-box-sizing: border-box;
           box-sizing: border-box; }
 
+.bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("./images/bg.png");
+  background-size: cover;
+  background-position: center;
+  opacity: 0.7; }
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 0; }
+
+ul {
+  margin: 0;
+  padding: 0; }
+  ul li {
+    list-style: none; }
+
+body,
+html {
+  font-size: 100%;
+  line-height: 1.4;
+  color: white;
+  background-color: black;
+  font-family: 'Hiragino Kaku Gothic ProN'; }
+
 .wp {
-  padding: 20px; }
-  .wp .bg {
-    z-index: -1;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: url("./images/bg.png");
-    background-size: cover; }
-  .wp h1,
-  .wp h2,
-  .wp h3,
-  .wp h4 {
-    margin: 0; }
-  .wp h1,
-  .wp h2 {
-    color: white; }
-  .wp header {
-    z-index: 2; }
-    .wp header h2 {
-      font-size: 30px; }
-  .wp article {
-    z-index: 1;
-    background-color: rgba(255, 255, 255, 0.8);
-    color: black;
-    width: 100%;
+  padding: 20px;
+  width: 100%;
+  height: 100%;
+  word-break: break-all; }
+  .wp .wp-inner {
     height: 100%; }
-    .wp article h1 {
-      color: black; }
-    .wp article rikaaa-scrollbar div {
-      width: 100%; }
-      .wp article rikaaa-scrollbar div p {
-        display: block;
-        word-break: break-all; }
-      .wp article rikaaa-scrollbar div > section {
-        max-width: 1068px;
-        margin: 0 auto;
-        margin-bottom: 20px; }
-        .wp article rikaaa-scrollbar div > section .title {
-          font-weight: bold;
-          font-size: 30px;
-          margin: 0;
-          margin-bottom: 30px;
-          border-width: 0 0 1px 0;
-          border-style: solid;
-          border-color: black; }
-        .wp article rikaaa-scrollbar div > section .subtitle {
-          font-weight: bold;
-          font-size: 15px;
-          background-color: white;
-          border: 1px solid black;
-          padding: 10px; }
-        .wp article rikaaa-scrollbar div > section .subsection {
-          padding-bottom: 20px;
-          margin-bottom: 40px; }
-        .wp article rikaaa-scrollbar div > section .important {
-          font-weight: bold; }
-        .wp article rikaaa-scrollbar div > section:last-child {
+  .wp h1 {
+    font-size: 2rem; }
+  .wp h2 {
+    font-size: 1.625rem; }
+  .wp h3 {
+    font-size: 1rem; }
+  .wp > header,
+  .wp article {
+    position: relative; }
+  .wp header {
+    height: 60px; }
+    .wp header > * {
+      position: relative;
+      top: 50%;
+      -webkit-transform: translateY(-50%);
+          -ms-transform: translateY(-50%);
+              transform: translateY(-50%); }
+  .wp article {
+    background-color: rgba(0, 0, 0, 0.7); }
+    .wp article .article-wrap {
+      max-width: 1160px;
+      padding: 20px;
+      margin: 0 auto; }
+      .wp article .article-wrap section {
+        font-size: 0.75rem;
+        margin-bottom: 30px; }
+        .wp article .article-wrap section:last-child {
           margin-bottom: 0; }
-        .wp article rikaaa-scrollbar div > section .attribute-table {
-          background-color: white; }
-          .wp article rikaaa-scrollbar div > section .attribute-table thead {
+        .wp article .article-wrap section section {
+          margin-bottom: 15px; }
+          .wp article .article-wrap section section:last-child {
+            margin-bottom: 0; }
+        .wp article .article-wrap section pre.prettyprint {
+          width: 100%;
+          border-radius: 0;
+          margin: 0;
+          margin-bottom: 5px; }
+          .wp article .article-wrap section pre.prettyprint:last-child {
+            margin-bottom: 0; }
+        .wp article .article-wrap section .title {
+          margin-bottom: 30px;
+          border-bottom: 1px solid white; }
+        .wp article .article-wrap section .sub-title {
+          border-left: 2px solid white;
+          margin-bottom: 10px; }
+          .wp article .article-wrap section .sub-title:before {
+            content: "・";
+            color: #66b9c8; }
+          .wp article .article-wrap section .sub-title::last-child {
+            margin-bottom: 0; }
+        .wp article .article-wrap section table {
+          table-layout: fixed;
+          width: 100%;
+          margin-bottom: 5px; }
+          .wp article .article-wrap section table:last-child {
+            margin-bottom: 0; }
+          .wp article .article-wrap section table thead {
             font-weight: bold;
             color: white;
             background-color: black; }
-            .wp article rikaaa-scrollbar div > section .attribute-table thead td {
-              padding: 5px;
-              padding-left: 15px; }
-            .wp article rikaaa-scrollbar div > section .attribute-table thead .attr {
+            .wp article .article-wrap section table thead td {
+              padding: 5px; }
+            .wp article .article-wrap section table thead .attr {
               min-width: 220px; }
-          .wp article rikaaa-scrollbar div > section .attribute-table tbody td {
+          .wp article .article-wrap section table tbody td {
             border: 1px solid black;
-            padding: 15px; }
-            .wp article rikaaa-scrollbar div > section .attribute-table tbody td:first-child {
+            padding: 5px;
+            color: black;
+            background-color: white; }
+            .wp article .article-wrap section table tbody td:first-child {
               color: #32cd32;
               font-weight: bold; }
+            .wp article .article-wrap section table tbody td p {
+              margin: 0; }
+        .wp article .article-wrap section li {
+          margin-bottom: 40px; }
+          .wp article .article-wrap section li:last-child {
+            margin-bottom: 0; }
