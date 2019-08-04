@@ -274,6 +274,9 @@ export default class rikaaahoge extends HTMLElement {
         const attr = this.getAttribute('autohide');
         return (attr === null) ? this.hide : (attr.toLowerCase() === 'true');
     }
+    get root() {
+        return this.view;
+    }
     setBarAreaSeparation(btnH_px, btnSeparation_px, changIngAnimationDuration_ms) {
         const btnh = (this.usenavi && this.naviData !== null) ? btnH_px : 0;
         const btn = this.shadowRoot.querySelectorAll('.btn');
