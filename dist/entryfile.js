@@ -2,8 +2,8 @@
  * @license
  * rikaaa-scrollbar.js
  *
- * Generated : 2019-07-21
- * Version : 1.0.3
+ * Generated : 2019-08-05
+ * Version : 1.1.0
  * Author : rikaaa.org | Yuki Hata
  * Url : http://rikaaa.org
  *
@@ -1334,6 +1334,11 @@
       get: function get() {
         var attr = this.getAttribute('autohide');
         return attr === null ? this.hide : attr.toLowerCase() === 'true';
+      }
+    }, {
+      key: "root",
+      get: function get() {
+        return this.view;
       }
     }, {
       key: "scrollRatio",
