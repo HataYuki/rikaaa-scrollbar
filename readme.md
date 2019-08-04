@@ -1,10 +1,13 @@
 # `<rikaaa-scrollbar>`
+The Custom Element in order to impliment simple scrollBar function.  
 ![](rikaaa-scrollbar.gif)
 
+## Issue
+1. Currently, The Custom Element does not support horizontal scroll bars.
 
 ## Installation
 ```bash
-#script
+#HTML
 <!-- If you want to use the Custom Element with browser without not support Webcomponents. -->
 <script src="https://unpkg.com/@webcomponents/webcomponentsjs@2.2.10/webcomponents-loader.js"></script>
 
@@ -13,74 +16,73 @@
 
 ## Usage 
 You need to specify the height for 'rikaaa-scrollbar' tag or its parent element!.
+
+
 ```bash
+#HTML
 <rikaaa-scrollbar style="height:500px";>
   write in your content
 </rikaaa-scrollbar>
 ``` 
 
-## example 
-HTML
-``` bash
-<div class="wp">
-     <div class="wp-inner">
-          <headr>
-              write in your content.
-          </headr>
-          <article>
-              <rikaaa-scrollbar id="main">
-                  <div> <!-- <== Require!! -->
-                      <section id="t1">write in your content.</section>
-                      <section id="t2">write in your content.</section>
-                      <section id="t3">write in your content.</section>
-                      <section id="t4">write in your content.</section>
-                      <section id="t5">write in your content.</section>
-                  </div>
-              </rikaaa-scrollbar>
-          </article>
-     </div>
- </wp>
-```
+or
 
-Javascript
 ```bash
-var wp = document.querySelector(".wp"),
-      article = document.querySelector("article"),
-      header = document.querySelector("header"),
-      wp_inner = document.querySelector(".wp-inner"),
-      fit = function () {
-        wp.style.width = window.innerWidth + "px";
-        wp.style.height = window.innerHeight + "px";
-        article.style.height = (wp_inner.offsetHeight - header.offsetHeight) + "px";
-      };
+#HTML
+<section style="height:500px;">
+  <rikaaa-scrollbar>
+    <div>
+        write in your content
+    </div>
+  </rikaaa-scrollbar>
+</section>
+``` 
 
-window.addEventListener("resize", fit);
-fit();
-```
-if you want to use navigation.
+## Events
+- __main.addEventListener("load",callback)__  
+_he event will be triggered the custom element loaded._
 ```bash
-var main = document.getElementById("main");
+var scrollbar = document.querySelector("rikaaa-scrollbar");
 
-main.addEventListener("load", function () {
+scrollbar.addEventListener("load", function () {
     console.log("load");
-    main.navi([
-        { name: "page top", id: "t1" },
-        { name: "Issue", id: "t2" },
-        { name: "Installation", id: "t3" },
-        { name: "Usage", id: "t4" },
-        { name: "Attribute", id: "t5" },
+});
+```
+
+## Getters
+| Getter | Description |
+----|----
+|rikaaascrollbar.root|The value is Element as View-port.|
+
+## Methods
+- __rikaaascrollbar.navi(Array);__  
+_The methods will be activate Smooth Scroll._
+```bash
+var scrollbar = document.querySelector("rikaaa-scrollbar");
+
+scrollbar.addEventListener("load", function () {
+    console.log("load");
+    scrollbar.navi([
+        { name: "aaaaa", id: "The id Attribute of html element" },
+        { name: "bbbbb", id: "The id Attribute of html element" },
+        { name: "ccccc", id: "The id Attribute of html element" },
+        { name: "ddddd", id: "The id Attribute of html element" },
+        { name: "eeeee", id: "The id Attribute of html element" },
     ]);
 });
 ```
 
-
-## Attribute
+## Attributes
 | Atrribute | Description |
 ----|----
 | minwidth = "integer" | The parameter to set the maximum width of bar by integral number. The unit is pixel. default value is 8. |
 | maxwidth = "integer" | The parameter to set the minimum width of bar by integral number. The unit is pixel. default value is 8. |
 | autohide = "boolean" | The parameter to set availability of whether to allow bar to be hidden automatically by truth value. default is 'true'. |
 | usenavi = "boolean"|The parameter to set availability of whether to use navigation function or not by truth value. default is 'true'. |
+
+## Change Log
+1. v1.1.0
+    - The "root" getter added.
 
 ## Browser Support
 - Google Chrome  
