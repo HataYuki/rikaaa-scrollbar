@@ -2,7 +2,7 @@
  * @license
  * rikaaa-scrollbar.js
  *
- * Generated : 2019-08-05
+ * Generated : 2019-09-30
  * Version : 1.1.0
  * Author : rikaaa.org | Yuki Hata
  * Url : http://rikaaa.org
